@@ -102,10 +102,11 @@ echo "----------------------------------------"
 
 # for each pkg-file in ./pkg, install all packages in that file.
 echo "installing packages..."
-echo "$RESET"
 
 cd ./pkg
 for PKG_FILE in $(ls) ; do
+    echo "$RESET"
+
     # display the contained packages,
     echo "$MAGENTA  $PKG_FILE"
     echo "------------------------------"
@@ -136,3 +137,7 @@ done
 echo "$BLUE"
 echo "packages are installed."
 echo "----------------------------------------"
+
+# install dwm
+echo "installing dwm..."
+echo "$RESET"
