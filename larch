@@ -105,12 +105,27 @@ echo "installing packages..."
 echo "$RESET"
 
 cd ./pkg
-for PKG_FILE in $(ls)
-do
+for PKG_FILE in $(ls) ; do
+    # display the contained packages,
     echo "$MAGENTA  $PKG_FILE"
+    echo "----------------------------------------"
+    sed "s/^\s*//g ; /^#/d ; /^$/d ; s/^/  /" "$PKG_FILE"
     echo "----------------------------------------""$RESET"
 
-    sed "s/^\s*//g ; /^#/d ; /^$/d" "$PKG_FILE" | paru -S --needed -
+    # and ask the user whether or not she would like to install them.
+    CONTINUE=" "
+    while \
+        [ "$CONTINUE" != "" ] && \
+        [ "$CONTINUE" != "Y" ] && \
+        [ "$CONTINUE" != "Y" ] && \
+        [ "$CONTINUE" != "y" ] && \
+        [ "$CONTINUE" != "n" ] ; do
+        read -p "  continue? (Y/n): " CONTINUE
+    done
+
+    [ "$CONTINUE" != "n" ] && [ "$CONTINUE" != "N" ] \
+        && sed "s/^\s*//g ; /^#/d ; /^$/d" "$PKG_FILE" | paru -S --needed - \
+        || echo "  skipping $PKG_FILE..."
 
     echo
 done
