@@ -39,6 +39,16 @@ install_suckless_fork() {
     echo "------------------------------""$RESET"
 
     if ! which "$1" > /dev/null 2>&1 ; then
+
+        CONTINUE=" "
+        while [ "$CONTINUE" != "" ] && \
+              [ "$CONTINUE" != "y" ] && \
+              [ "$CONTINUE" != "Y" ] && \
+              [ "$CONTINUE" != "n" ] && \
+              [ "$CONTINUE" != "N" ] ; do
+            read -p "  continue? (Y/n): " CONTINUE
+        done
+
         mkdir -p "$HOME/.local/src/suckless" || exit
         cd "$HOME/.local/src/suckless" || exit
         git clone "https://github.com/nebulaeandstars/$1.git" "$1" 2>/dev/null
