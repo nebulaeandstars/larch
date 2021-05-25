@@ -1,0 +1,6 @@
+# documents
+# for packages to do with compiling and manipulating PDFs, TeX, etc.
+
+texlive-most
+biber
+pandoc-bin
