@@ -114,18 +114,22 @@ for PKG_FILE in $(ls) ; do
 
     # and ask the user whether or not she would like to install them.
     CONTINUE=" "
-    while \
-        [ "$CONTINUE" != "" ] && \
-        [ "$CONTINUE" != "Y" ] && \
-        [ "$CONTINUE" != "Y" ] && \
-        [ "$CONTINUE" != "y" ] && \
-        [ "$CONTINUE" != "n" ] ; do
+    while [ "$CONTINUE" != "" ] && \
+          [ "$CONTINUE" != "y" ] && \
+          [ "$CONTINUE" != "Y" ] && \
+          [ "$CONTINUE" != "n" ] && \
+          [ "$CONTINUE" != "N" ] ; do
         read -p "  continue? (Y/n): " CONTINUE
     done
 
-    [ "$CONTINUE" != "n" ] && [ "$CONTINUE" != "N" ] \
-        && sed "s/^\s*//g ; /^#/d ; /^$/d" "$PKG_FILE" | paru -S --needed - \
-        || echo "  skipping $PKG_FILE..."
+    # if the user chose to install this packagefile, install it.
+    [ "$CONTINUE" != "n" ] && [ "$CONTINUE" != "N" ] && {
+        echo "  installing $PKG_FILE..."
+        sed "s/^\s*//g ; /^#/d ; /^$/d" "$PKG_FILE" | paru -S --needed -
+    # otherwise, do nothing.
+    } || {
+        echo "  skipping $PKG_FILE..."
+    }
 
-    echo
+echo
 done
