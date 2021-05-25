@@ -1,0 +1,68 @@
+#!/bin/sh
+#  _        _             _
+# | |      / \   _ __ ___| |__
+# | |     / _ \ | '__/ __| '_ \
+# | |___ / ___ \| | | (__| | | |
+# |_____/_/   \_\_|  \___|_| |_|
+#
+# Script for automatically configuring a fresh Arch linux install.
+# by nebulaeandstars@gmail.com
+
+
+################################################################################
+# CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS ########
+################################################################################
+
+RED="$(tput setaf 9)"
+GREEN="$(tput setaf 10)"
+BLUE="$(tput setaf 12)"
+CYAN="$(tput setaf 14)"
+RESET="$(tput sgr0)"
+
+
+################################################################################
+# FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS ########
+################################################################################
+
+# sets up symlinks for a given stow directory.
+config() {
+    echo "setting up symlinks for $1."
+    stow -t ~ "$1"
+}
+
+
+################################################################################
+# PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM ########
+################################################################################
+
+# make sure that the archlinux servers are reachable.
+echo "$BLUE"
+echo "----------------------------------------"
+echo "connecting to the archlinux.org servers..."
+echo "$RESET"
+
+ping -c 1 -W 2 archlinux.org || {
+    echo "$RED""----------------------------------------"
+    echo "cannot connect to the internet. aborting..."
+    echo "$RESET"
+    exit
+}
+
+echo "$BLUE"
+echo "----------------------------------------"
+echo "connection success!"
+echo "updating the system..."
+echo "$RESET"
+
+# update the system.
+sudo pacman -Syu || {
+    echo "$RED""----------------------------------------"
+    echo "system update is required. aborting..."
+    echo "$RESET"
+    exit
+}
+
+echo "$BLUE"
+echo "----------------------------------------"
+echo "the system is up to date."
+echo "$RESET"
