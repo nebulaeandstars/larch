@@ -108,9 +108,9 @@ cd ./pkg
 for PKG_FILE in $(ls) ; do
     # display the contained packages,
     echo "$MAGENTA  $PKG_FILE"
-    echo "----------------------------------------"
+    echo "------------------------------"
     sed "s/^\s*//g ; /^#/d ; /^$/d ; s/^/  /" "$PKG_FILE"
-    echo "----------------------------------------""$RESET"
+    echo "------------------------------""$RESET"
 
     # and ask the user whether or not she would like to install them.
     CONTINUE=" "
@@ -131,5 +131,8 @@ for PKG_FILE in $(ls) ; do
         echo "  skipping $PKG_FILE..."
     }
 
-echo
 done
+
+echo "$BLUE"
+echo "packages are installed."
+echo "----------------------------------------"
