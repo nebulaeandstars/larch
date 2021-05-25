@@ -13,6 +13,8 @@
 # CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS # CONSTANTS ########
 ################################################################################
 
+DIR=$(cd $(dirname $0) && pwd)
+
 RED="$(tput setaf 9)"
 GREEN="$(tput setaf 10)"
 BLUE="$(tput setaf 12)"
@@ -31,13 +33,30 @@ config() {
     stow -t ~ "$1"
 }
 
+# installs a suckless fork, assuming that it exists.
+install_suckless_fork() {
+    echo "$MAGENTA  installing $1"
+    echo "------------------------------""$RESET"
+
+    if ! which "$1" > /dev/null 2>&1 ; then
+        mkdir -p "$HOME/.local/src/suckless" || exit
+        cd "$HOME/.local/src/suckless" || exit
+        git clone "https://github.com/nebulaeandstars/$1.git" "$1" 2>/dev/null
+        cd "$1" || exit
+        sudo make install
+    else
+        echo "$1 is already installed."
+    fi
+    echo
+}
+
 
 ################################################################################
 # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM ########
 ################################################################################
 
 # change into the larch directory.
-cd $(dirname $0)
+cd "$DIR"
 
 # make sure that the archlinux servers are reachable.
 echo "$BLUE"
@@ -82,9 +101,10 @@ else
 fi
 
 # install paru
-if ! pacman -Qi paru > /dev/null ; then
+if ! pacman -Qi paru > /dev/null 2>&1 ; then
     cd /tmp || exit
-    git clone https://aur.archlinux.org/paru.git
+    rm -rf paru
+    git clone https://aur.archlinux.org/paru-bin.git paru
     cd paru || exit
     makepkg -si --noconfirm
 else
@@ -103,7 +123,7 @@ echo "----------------------------------------"
 # for each pkg-file in ./pkg, install all packages in that file.
 echo "installing packages..."
 
-cd ./pkg
+cd "$DIR/pkg"
 for PKG_FILE in $(ls) ; do
     echo "$RESET"
 
@@ -138,6 +158,12 @@ echo "$BLUE"
 echo "packages are installed."
 echo "----------------------------------------"
 
-# install dwm
-echo "installing dwm..."
+# install suckless forks
+echo "installing suckless forks..."
 echo "$RESET"
+
+install_suckless_fork "dwm"
+install_suckless_fork "st"
+install_suckless_fork "dmenu"
+install_suckless_fork "xmenu"
+install_suckless_fork "dwmblocks"
