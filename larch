@@ -177,3 +177,32 @@ install_suckless_fork "st"
 install_suckless_fork "dmenu"
 install_suckless_fork "xmenu"
 install_suckless_fork "dwmblocks"
+
+echo "$BLUE"
+echo "suckless forks are installed."
+echo "----------------------------------------"
+
+
+################################################################################
+# CONFIGURE # CONFIGURE # CONFIGURE # CONFIGURE # CONFIGURE # CONFIGURE ########
+################################################################################
+
+# install dotfiles
+echo "installing dotfiles..."
+echo "$RESET"
+
+# clone dotfiles unless they already exist
+cd "$HOME"
+[ -d "$HOME/.dotfiles" ] || git clone https://github.com/nebulaeandstars/dotfiles.git .dotfiles
+cd "$HOME/.dotfiles"
+
+# create symlinks to dotfiles using stow
+cd ~/.dotfiles || exit
+for PACKAGE in $(ls -d $(pwd)/*/) ; do
+    echo "$MAGENTA  setting up symlinks for ""$RESET""$(basename $PACKAGE)""$MAGENTA"".$RESET"
+    stow -t ~ "$(basename $PACKAGE)"
+done
+
+echo "$BLUE"
+echo "dotfiles are installed."
+echo "----------------------------------------"
