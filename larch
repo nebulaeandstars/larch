@@ -27,12 +27,6 @@ RESET="$(tput sgr0)"
 # FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS # FUNCTIONS ########
 ################################################################################
 
-# sets up symlinks for a given stow directory.
-config() {
-    echo "setting up symlinks for $1."
-    stow -t ~ "$1"
-}
-
 # installs a suckless fork, assuming that it exists.
 install_suckless_fork() {
     echo "$MAGENTA  installing $1"
@@ -150,16 +144,13 @@ for PKG_FILE in $(ls) ; do
           [ "$CONTINUE" != "Y" ] && \
           [ "$CONTINUE" != "n" ] && \
           [ "$CONTINUE" != "N" ] ; do
-        read -p "  continue? (Y/n): " CONTINUE
+        read -p "  install $PKG_FILE? (Y/n): " CONTINUE
     done
 
     # if the user chose to install this packagefile, install it.
     [ "$CONTINUE" != "n" ] && [ "$CONTINUE" != "N" ] && {
         echo "  installing $PKG_FILE..."
         sed "s/^\s*//g ; /^#/d ; /^$/d" "$PKG_FILE" | paru -S --needed -
-    # otherwise, do nothing.
-    } || {
-        echo "  skipping $PKG_FILE..."
     }
 
 done
@@ -205,4 +196,50 @@ done
 
 echo "$BLUE"
 echo "dotfiles are installed."
+echo "----------------------------------------"
+
+# make caches (probably no need to notify for this)
+mkdir -pv .cache/mutt
+
+# move XDG_USER_DIRS
+echo "configuring XDG_USER_DIRS..."
+echo "$RESET"
+
+[ -d "$HOME/Documents" ] && {
+    echo "$MAGENTA  you are currently using the default XDG_USER_DIRS."
+    echo "------------------------------$RESET"
+
+    CONTINUE=" "
+    while [ "$CONTINUE" != "" ] && \
+          [ "$CONTINUE" != "y" ] && \
+          [ "$CONTINUE" != "Y" ] && \
+          [ "$CONTINUE" != "n" ] && \
+          [ "$CONTINUE" != "N" ] ; do
+        read -p "  change them? (Y/n): " CONTINUE
+    done
+
+    [ "$CONTINUE" != "n" ] && [ "$CONTINUE" != "N" ] && {
+        # move xdg directories into the right places
+        mv -v ~/Documents ~/docs
+        mv -v ~/Downloads ~/dl
+        mv -v ~/Pictures ~/img
+        mv -v ~/Videos ~/vids
+        mv -v ~/Music ~/music
+        mv -v ~/Public ~/.local/public
+        mv -v ~/Desktop ~/.local/desktop
+        mv -v ~/Templates ~/.local/templates
+    }
+} || {
+    [ -d "$HOME/docs" ] && {
+        echo "XDG_USER_DIRS are already configured."
+    } || {
+        echo "$RED""----------------------------------------"
+        echo "XDG_USER_DIRS do not exist yet. Please figure this out first."
+        echo "$RESET"
+        exit
+    }
+}
+
+echo "$BLUE"
+echo "XDG_USER_DIRS are configured."
 echo "----------------------------------------"
