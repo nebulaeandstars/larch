@@ -1,0 +1,13 @@
+# interface
+
+# sound
+alsa
+alsa-utils
+pipewire
+pipewire-alsa
+pipewire-jack
+
+# video
+xorg
+picom-ibhagwan-git
+libxft-bgra
