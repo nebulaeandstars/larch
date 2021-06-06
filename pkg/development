@@ -1,0 +1,27 @@
+# development
+
+python
+python-pip
+python-language-server
+
+texlive-most
+proselint
+texlab
+biber
+
+jdk-openjdk
+java-openjfx
+
+rustup
+
+gcc
+cmake
+ccls
+
+npm
+
+bash-language-server
+
+vint
+
+prettier
