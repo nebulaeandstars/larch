@@ -59,6 +59,13 @@ install_suckless_fork() {
 # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM # PRELIM ########
 ################################################################################
 
+
+echo  "$BLUE"' _        _             _
+| |      / \   _ __ ___| |__
+| |     / _ \ |  __/ __|  _ \
+| |___ / ___ \| | | (__| | | |
+|_____/_/   \_\_|  \___|_| |_|'"$RESET"
+
 # change into the larch directory.
 cd "$DIR"
 
@@ -255,4 +262,6 @@ echo "$RESET"
 
 echo "$BLUE"
 echo "XDG_USER_DIRS are configured."
-echo "----------------------------------------"
+
+echo "$GREEN----------------------------------------"
+echo "done!"
