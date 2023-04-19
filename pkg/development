@@ -4,10 +4,8 @@ python
 python-pip
 python-language-server
 
-texlive-most
 proselint
 texlab
-biber
 
 jdk-openjdk
 java-openjfx
